@@ -8,7 +8,8 @@ import (
 )
 
 type Request struct {
-	RequestLine RequestLine
+	RequestLine  RequestLine
+	Parser_state int
 }
 
 type RequestLine struct {
@@ -18,13 +19,19 @@ type RequestLine struct {
 }
 
 func RequestFromReader(reader io.Reader) (*Request, error) {
-	req, err := io.ReadAll(reader)
+	buf := make([]byte, 4096)
+	n, err := reader.Read(buf) //reader.Read fills a byte size that we provide
 	if err != nil {
 		fmt.Println("Error reading request")
 		return nil, err
 	}
 
 	req_string := string(req) //convert []bytes into string
+
+	idx := strings.Index(req_string, "\r\n")
+	if idx == -1 {
+		return 0, nil
+	}
 
 	parts := strings.Split(req_string, "\r\n")
 
@@ -66,4 +73,11 @@ func parseRequestLine(req string) ([]string, error) { //we are only parsing GET 
 
 	return []string{method, req_target, version}, nil
 
+}
+
+func (r *Request) parse(data []byte) (int, error) {
+
+	//accepts the next slice of bytes that need to be pparsed in the request struct
+	// updates state of the parser
+	// returns number of bytes it consumed and error if it encounteered one
 }

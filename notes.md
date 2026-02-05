@@ -69,3 +69,12 @@ field-name: value \r\n
 http1 knows its done when it sees a empty line with a \r\n
 
 
+TCP, and by extension HTTP is a streaming protocol meaning we receive data in chunks and should be able to parse it as it ccomes > [!IMPORTANT]
+> 
+Eg: GE
+
+THEN the final T comes in 
+
+We should be able to know this is a GET
+
+
